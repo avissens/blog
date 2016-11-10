@@ -1,0 +1,10 @@
+{% import "macros.html" as macros %}
+{% extends "base.html" %}
+{% block content %}
+
+{{ macros.render_entry(entry) }}
+<ul class="edit">
+        <button type="submit" class="btn btn-default"><a href="/entry/{{ entry.id }}/edit">Edit</a></button>
+        <button type="submit" class="btn btn-default"><a href="/entry/{{ entry.id }}/delete">Delete</a></button>
+</ul>
+{% endblock %}
