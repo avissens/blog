@@ -133,5 +133,5 @@ def signup_post():
         return redirect(url_for("signup_post"))
     session.add(user)
     session.commit()
-    flash("User successfully registered. Please login")
+    flash("User successfully registered. Please login", "success")
     return redirect(url_for("login_get"))
