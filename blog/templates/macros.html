@@ -11,6 +11,9 @@
         <h1>
             <a href="/entry/{{ entry.id }}">{{ entry.title }}</a>
         </h1>
+            <p>
+                {{ entry.author.name }}
+            </p>
         {{ entry.content | markdown }}
     </div>
 </div>

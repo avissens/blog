@@ -39,6 +39,8 @@ from flask.ext.login import login_required
 @login_required
 def add_entry_get():
     return render_template("add_entry.html")
+    
+from flask.ext.login import current_user
 
 @app.route("/entry/add", methods=["POST"])
 @login_required
@@ -46,6 +48,7 @@ def add_entry_post():
     entry = Entry(
         title=request.form["title"],
         content=request.form["content"],
+        author=current_user
     )
     session.add(entry)
     session.commit()
@@ -62,6 +65,7 @@ def edit_entry_get(id):
     return render_template("edit.html", entry=entry)
     
 @app.route("/entry/<int:id>/edit", methods=["POST"])
+@login_required
 def edit_entry_post(id):
     entry = session.query(Entry).get(id)
     entry.title = request.form["title"]
@@ -70,25 +74,27 @@ def edit_entry_post(id):
     return redirect(url_for("entries"))
 
 @app.route("/entry/<int:id>/delete", methods=["GET"])
+@login_required
 def delete_entry(id):
     entry = session.query(Entry).get(id)
     return render_template("delete.html", entry=entry)
     
 @app.route("/entry/<int:id>/delete", methods=["POST"])
+@login_required
 def delete_entry_post(id):
     entry = session.query(Entry).get(id)
     session.delete(entry)
     session.commit()
     return redirect(url_for("entries"))
-    
+
+from flask import flash
+from flask.ext.login import login_user, logout_user
+from werkzeug.security import check_password_hash
+from .database import User
+
 @app.route("/login", methods=["GET"])
 def login_get():
     return render_template("login.html")
-    
-from flask import flash
-from flask.ext.login import login_user
-from werkzeug.security import check_password_hash
-from .database import User
 
 @app.route("/login", methods=["POST"])
 def login_post():
@@ -98,6 +104,32 @@ def login_post():
     if not user or not check_password_hash(user.password, password):
         flash("Incorrect username or password", "danger")
         return redirect(url_for("login_get"))
-
     login_user(user)
     return redirect(request.args.get('next') or url_for("entries"))
+
+@app.route("/logout")
+def logout():
+    logout_user()
+    return render_template("logout.html")
+    
+@app.route("/signup", methods=["GET"])
+def signup_get():
+    return render_template("signup.html")
+
+from werkzeug.security import generate_password_hash
+    
+@app.route("/signup" , methods=["POST"])
+def signup_post():
+    name = request.form["name"]
+    email = request.form["email"]
+    password = request.form["password"]
+    password_2 = request.form["password_2"]
+    user = User(name=name, email=email, password=generate_password_hash(password))
+    if session.query(User).filter_by(email=email).first():
+        flash("User with that email address already exists")
+    if password != password_2:
+        flash("Password doesn't match")
+    session.add(user)
+    session.commit()
+    flash("User successfully registered. Please login")
+    return redirect(url_for("login_get"))

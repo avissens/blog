@@ -4,5 +4,11 @@ div.metadata {
 }
 
 .edit {
-  margin-left: 11em;
+    margin-left: 11em;
+}
+
+.signup {
+    color: white;
+    margin-top: 15px;
+    text-align: right;
 }
