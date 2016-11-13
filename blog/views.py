@@ -111,12 +111,12 @@ def login_post():
 def logout():
     logout_user()
     return render_template("logout.html")
-    
+
+from werkzeug.security import generate_password_hash
+
 @app.route("/signup", methods=["GET"])
 def signup_get():
     return render_template("signup.html")
-
-from werkzeug.security import generate_password_hash
     
 @app.route("/signup" , methods=["POST"])
 def signup_post():
