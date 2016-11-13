@@ -126,9 +126,11 @@ def signup_post():
     password_2 = request.form["password_2"]
     user = User(name=name, email=email, password=generate_password_hash(password))
     if session.query(User).filter_by(email=email).first():
-        flash("User with that email address already exists")
+        flash("User with that email address already exists", "danger")
+        return redirect(url_for("login_get"))
     if password != password_2:
-        flash("Password doesn't match")
+        flash("Password doesn't match", "danger")
+        return redirect(url_for("signup_post"))
     session.add(user)
     session.commit()
     flash("User successfully registered. Please login")
