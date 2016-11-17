@@ -47,6 +47,26 @@ class TestViews(unittest.TestCase):
         button = self.browser.find_by_css("button[type=submit]")
         button.click()
         self.assertEqual(self.browser.url, "http://127.0.0.1:8080/login")
+        
+    def test_signup_correct(self):
+        self.browser.visit("http://127.0.0.1:8080/signup")
+        self.browser.fill("name", "Bob")
+        self.browser.fill("email", "bob@example.com")
+        self.browser.fill("password", "test")
+        self.browser.fill("password_2", "test")
+        button = self.browser.find_by_css("button[type=submit]")
+        button.click()
+        self.assertEqual(self.browser.url, "http://127.0.0.1:8080/signup")
+        
+    def test_signup_incorrect(self):
+        self.browser.visit("http://127.0.0.1:8080/signup")
+        self.browser.fill("name", "Bob")
+        self.browser.fill("email", "bob@example.com")
+        self.browser.fill("password", "test")
+        self.browser.fill("password_2", "tests")
+        button = self.browser.find_by_css("button[type=submit]")
+        button.click()
+        self.assertEqual(self.browser.url, "http://127.0.0.1:8080/signup")
 
     def tearDown(self):
         """ Test teardown """

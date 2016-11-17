@@ -46,7 +46,25 @@ class TestViews(unittest.TestCase):
         self.assertEqual(entry.title, "Test Entry")
         self.assertEqual(entry.content, "Test content")
         self.assertEqual(entry.author, self.user)
+"""    
+    def test_edit_entry(self):
+        self.simulate_login()
 
+        response = self.client.post("/entry/edit", data={
+            "title": "Test Entry Edited",
+            "content": "Test content Edited"
+        })
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(urlparse(response.location).path, "/")
+        entries = session.query(Entry).all()
+        self.assertEqual(len(entries), 1)
+
+        entry = entries[0]
+        self.assertEqual(entry.title, "Test Entry Edited")
+        self.assertEqual(entry.content, "Test content Edited")
+        self.assertEqual(entry.author, self.user)
+"""        
     def tearDown(self):
         """ Test teardown """
         session.close()
