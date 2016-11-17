@@ -124,13 +124,16 @@ def signup_post():
     email = request.form["email"]
     password = request.form["password"]
     password_2 = request.form["password_2"]
-    user = User(name=name, email=email, password=generate_password_hash(password))
     if session.query(User).filter_by(email=email).first():
         flash("User with that email address already exists", "danger")
         return redirect(url_for("login_get"))
     if password != password_2:
         flash("Password doesn't match", "danger")
-        return redirect(url_for("signup_post"))
+        return render_template("signup.html")
+    if len(password) < 8:
+        flash("Password too short, use at least 8 characters", "danger")
+        return render_template("signup.html")
+    user = User(name=name, email=email, password=generate_password_hash(password))    
     session.add(user)
     session.commit()
     flash("User successfully registered. Please login", "success")

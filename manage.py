@@ -39,6 +39,7 @@ def adduser():
         return
 
     password = ""
+#    password_2 = ""
     while len(password) < 8 or password != password_2:
         password = getpass("Password: ")
         password_2 = getpass("Re-enter password: ")
