@@ -63,8 +63,8 @@ class TestViews(unittest.TestCase):
         entry = entries[0]
         self.assertEqual(entry.title, "Test Entry Edited")
         self.assertEqual(entry.content, "Test content Edited")
-        self.assertEqual(entry.author, self.user)
-"""        
+        self.assertEqual(entry.author, self.user)"""
+        
     def tearDown(self):
         """ Test teardown """
         session.close()
