@@ -28,7 +28,8 @@ class TestViews(unittest.TestCase):
         with self.client.session_transaction() as http_session:
             http_session["user_id"] = str(self.user.id)
             http_session["_fresh"] = True
-
+            
+# Test add entry when user logged in
     def test_add_entry(self):
         self.simulate_login()
 
@@ -46,13 +47,38 @@ class TestViews(unittest.TestCase):
         self.assertEqual(entry.title, "Test Entry")
         self.assertEqual(entry.content, "Test content")
         self.assertEqual(entry.author, self.user)
-"""    
+        
+# Test delete entry when user logged in
+    def test_delete_entry(self):
+        self.simulate_login()
+        
+        # Create an test entry
+        test_entry = Entry(title="Test title", content="Testing editing entry", author=self.user)
+        session.add(test_entry)
+        session.commit()
+        
+        response = self.client.post("/entry/1/delete", data={
+            "title": "Title edited",
+            "content": "Content edited"
+        })
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(urlparse(response.location).path, "/")
+        entries = session.query(Entry).all()
+        self.assertEqual(len(entries), 0)
+
+# Test edit entry when user logged in
     def test_edit_entry(self):
         self.simulate_login()
-
-        response = self.client.post("/entry/edit", data={
-            "title": "Test Entry Edited",
-            "content": "Test content Edited"
+        
+        # Create an test entry
+        test_entry = Entry(title="Test title", content="Testing editing entry", author=self.user)
+        session.add(test_entry)
+        session.commit()
+        
+        response = self.client.post("/entry/1/edit", data={
+            "title": "Title edited",
+            "content": "Content edited"
         })
 
         self.assertEqual(response.status_code, 302)
@@ -61,9 +87,9 @@ class TestViews(unittest.TestCase):
         self.assertEqual(len(entries), 1)
 
         entry = entries[0]
-        self.assertEqual(entry.title, "Test Entry Edited")
-        self.assertEqual(entry.content, "Test content Edited")
-        self.assertEqual(entry.author, self.user)"""
+        self.assertEqual(entry.title, "Title edited")
+        self.assertEqual(entry.content, "Content edited")
+        self.assertEqual(entry.author, self.user)
         
     def tearDown(self):
         """ Test teardown """

@@ -26,12 +26,12 @@ class TestViews(unittest.TestCase):
                          password=generate_password_hash("test"))
         session.add(self.user)
         session.commit()
-
+        
         self.process = multiprocessing.Process(target=app.run,
                                                kwargs={"port": 8080})
         self.process.start()
         time.sleep(1)
-
+        
     def test_login_correct(self):
         self.browser.visit("http://127.0.0.1:8080/login")
         self.browser.fill("email", "alice@example.com")
@@ -48,26 +48,6 @@ class TestViews(unittest.TestCase):
         button.click()
         self.assertEqual(self.browser.url, "http://127.0.0.1:8080/login")
         
-    def test_signup_correct(self):
-        self.browser.visit("http://127.0.0.1:8080/signup")
-        self.browser.fill("name", "Bob")
-        self.browser.fill("email", "bob@example.com")
-        self.browser.fill("password", "test")
-        self.browser.fill("password_2", "test")
-        button = self.browser.find_by_css("button[type=submit]")
-        button.click()
-        self.assertEqual(self.browser.url, "http://127.0.0.1:8080/signup")
-        
-    def test_signup_incorrect(self):
-        self.browser.visit("http://127.0.0.1:8080/signup")
-        self.browser.fill("name", "Bob")
-        self.browser.fill("email", "bob@example.com")
-        self.browser.fill("password", "test")
-        self.browser.fill("password_2", "tests")
-        button = self.browser.find_by_css("button[type=submit]")
-        button.click()
-        self.assertEqual(self.browser.url, "http://127.0.0.1:8080/signup")
-
     def tearDown(self):
         """ Test teardown """
         # Remove the tables and their data from the database
