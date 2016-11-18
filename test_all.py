@@ -1,5 +1,5 @@
 # Test edit entry when user logged in
-    def test_edit_entry(self):
+    def test_delete_entry(self):
         self.simulate_login()
         
         # Create an test entry
@@ -7,7 +7,7 @@
         session.add(test_entry)
         session.commit()
         
-        response = self.client.post("/entry/1/edit", data={
+        response = self.client.post("/entry/1/delete", data={
             "title": "Title edited",
             "content": "Content edited"
         })
@@ -15,7 +15,7 @@
         self.assertEqual(response.status_code, 302)
         self.assertEqual(urlparse(response.location).path, "/")
         entries = session.query(Entry).all()
-        self.assertEqual(len(entries), 1)
+        self.assertEqual(len(entries), 0)
 
         entry = entries[0]
         self.assertEqual(entry.title, "Title edited")
