@@ -90,7 +90,27 @@ class TestViews(unittest.TestCase):
         self.assertEqual(entry.title, "Title edited")
         self.assertEqual(entry.content, "Content edited")
         self.assertEqual(entry.author, self.user)
-        
+
+# Test signup a user
+    def test_signup_user(self):
+
+        response = self.client.post("/signup", data={
+            "name": "Bob",
+            "email": "bob@example.com",
+            "password": "thisisbobspassword",
+            "password_2": "thisisbobspassword",
+        })
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(urlparse(response.location).path, "/login")
+        users = session.query(User).all()
+        self.assertEqual(len(users), 2)
+
+        user = users[1]
+        self.assertEqual(user.name, "Bob")
+        self.assertEqual(user.email, "bob@example.com")
+#        self.assertEqual(user.password, generate_password_hash("thisisbobspassword"))
+
     def tearDown(self):
         """ Test teardown """
         session.close()
