@@ -7,7 +7,7 @@ env:
 before_script:
     - psql -c 'create database "blogful-test";' -U postgres
 before_script:
-  - psql -c "CREATE USER ubuntu WITH PASSWORD 'thinkful';" -U postgres
+    - psql -c "CREATE USER ubuntu WITH PASSWORD 'thinkful';" -U postgres
   script:
     - PYTHONPATH=. python3 tests/test_filters.py
     - PYTHONPATH=. python3 tests/test_views_integration.py
