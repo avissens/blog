@@ -14,3 +14,5 @@ class TravisConfig(object):
     DEBUG = False
     SECRET_KEY = "Not secret"
     
+import pprint; 
+pprint.pprint(os.environ)
