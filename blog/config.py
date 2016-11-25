@@ -13,6 +13,3 @@ class TravisConfig(object):
     SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URI", "postgresql://localhost:5432/blogful-test")
     DEBUG = False
     SECRET_KEY = "Not secret"
-    
-import pprint; 
-pprint.pprint(os.environ)
