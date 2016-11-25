@@ -103,7 +103,7 @@ class TestViews(unittest.TestCase):
         })
 
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(urlparse(response.location).path, "/login")
+        self.assertEqual(urlparse(response.location).path, "/")
         users = session.query(User).all()
         self.assertEqual(len(users), 2)
 
